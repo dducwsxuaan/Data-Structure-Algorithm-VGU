@@ -1,0 +1,221 @@
+void insert_End(PtrToDoubleNode DL_head, int X){
+    struct doubleNode *newNode = (struct doubleNode*)malloc(sizeof(struct doubleNode));
+    newNode->data = X;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+
+    if (DL_head == NULL){
+        DL_head = newNode;
+    }
+    else{
+        struct doubleNode *temp = DL_head;
+        while (temp->next != NULL){
+            temp = temp->next;
+        }
+        temp->next = newNode;
+        newNode->prev = temp;
+    }
+}
+
+562+*124/-
+
+
+
+
+Question 4:
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+typedef struct Node* PtrToNode;
+typedef struct Node* Stack;
+struct queue {
+    PtrToNode Head;
+    PtrToNode Tail;
+};
+typedef struct queue *Queue;
+
+Stack CreateStack(){
+    Stack S = malloc(sizeof(struct Node));
+    if (S == NULL){
+        printf("Out of space!!!\n");
+    }
+    S->next = NULL;
+    return S;
+}
+
+void Push(Stack S, int x);
+int isEmpty(Stack S);
+int Pop(Stack S);
+int Top(Stack S);
+Queue CreateQueue(){
+    Queue Q = malloc(sizeof(struct queue));
+    Q->Head = malloc(sizeof(struct Node));
+    Q->Head->next = NULL;
+    Q->Tail = Q->Head;
+    return Q;
+}
+void Enqueue(Queue Q, int x);
+int IsEmpty(Queue Q);
+int top_Queue(Queue Q);
+int Dequeue(Queue Q);
+
+/ Q1 is a queue of integers in increasing order
+// Q2 is a queue of integers in decreasing order
+void EnqueueSorted(Queue Sort_Q, Queue Q1, Queue Q2){
+    Stack S = CreateStack();
+    while (Q2->Head->next != NULL){
+        Push(S, Dequeue(Q2));
+    }
+    while (!IsEmpty(Q1) || !IsEmpty(Q2)){
+        if (top_Queue(Q1) < Top(S)){
+            Enqueue(Sort_Q, Dequeue(Q1));
+            Q1->Head = Q1->Head->next;
+        }
+        else {
+            Enqueue(Sort_Q, Pop(S));
+            Q2->Head = Q2->Head->next;
+        }
+        
+    }
+    while (!isEmpty(S)){
+        Enqueue(Sort_Q, Pop(S));
+    }
+    while (!IsEmpty(Q2)){
+        Enqueue(Sort_Q, Dequeue(Q2));
+    }
+
+}
+
+int main(){
+    Queue Q1 = CreateQueue();
+    Queue Q2 = CreateQueue();
+    Queue Sort_Q = CreateQueue();
+    Enqueue(Q1, 1);
+    Enqueue(Q1, 5);
+    Enqueue(Q1, 9);
+    Enqueue(Q1, 40);
+    
+    Enqueue(Q2, 30);
+    Enqueue(Q2, 25);
+    Enqueue(Q2, 7);
+    Enqueue(Q2, 5);
+    Enqueue(Q2, 4);
+    EnqueueSorted(Sort_Q, Q1, Q2);
+    while (!IsEmpty(Sort_Q)){
+        printf("%d ", Dequeue(Sort_Q));
+    }
+    return 0;
+}
+
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+
+// Structure for a node in the linked list
+struct Node {
+    char data;
+    struct Node* next;
+};
+
+// Structure for a stack
+struct Stack {
+    struct Node* top;
+};
+
+// Function to check if the stack is empty
+bool isEmpty(struct Stack* stack) {
+    return stack->top == NULL;
+}
+
+// Function to push a character onto the stack
+void push(struct Stack* stack, char data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = stack->top;
+    stack->top = newNode;
+}
+
+// Function to pop a character from the stack
+char pop(struct Stack* stack) {
+    if (isEmpty(stack)) {
+        printf("Stack underflow!\n");
+        exit(1);
+    }
+    struct Node* temp = stack->top;
+    char data = temp->data;
+    stack->top = temp->next;
+    free(temp);
+    return data;
+}
+
+// Function to check if a word is inversible
+bool isWordInversible(struct Node* head) {
+    // Base case: an empty list or a single character is always inversible
+    if (head == NULL || head->next == NULL) {
+        return true;
+    }
+
+    // Create a stack
+    struct Stack* stack = (struct Stack*)malloc(sizeof(struct Stack));
+    stack->top = NULL;
+
+    // Push each character of the word onto the stack
+    struct Node* temp = head;
+    while (temp != NULL) {
+        push(stack, temp->data);
+        temp = temp->next;
+    }
+
+    // Compare the original word with the reversed word
+    temp = head;
+    while (temp != NULL) {
+        char data = pop(stack);
+        if (temp->data != data) {
+            return false;
+        }
+        temp = temp->next;
+    }
+
+    return true;
+}
+
+// Function to create a new node in the linked list
+struct Node* createNode(char data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+int main() {
+    // Create a sample linked list
+    struct Node* head = createNode('h');
+    head->next = createNode('a');
+    head->next->next = createNode('n');
+    head->next->next->next = createNode('n');
+    head->next->next->next->next = createNode('a');
+    head->next->next->next->next->next = createNode('h');
+
+    // Check if the word is inversible
+    if (isWordInversible(head)) {
+        printf("The word is inversible.\n");
+    } else {
+        printf("The word is not inversible.\n");
+    }
+
+    return 0;
+}
+
+
+
