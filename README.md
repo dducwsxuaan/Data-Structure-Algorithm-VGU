@@ -1,6 +1,7 @@
 ﻿# Data-Structure-Algorithm-VGU
 
 This is the full course Data Structure and Algorithm in Vietnamese-German University
+
 Lecturer: Dr. Truong Dinh Huy
 
 ## Course Content
